@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ItemType>PythonProject</ItemType>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{876C0FB2-F890-4EA7-94FC-327D47E57981}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>Debug</OutputPath>
+    <Build>
+      <Build Optimize="false" />
+    </Build>
+    <Runtime>
+      <Runtime Module="main" PythonOptions="">
+        <Interpreter path="/usr/bin/python2.6" ctype="Python26Runtime" />
+      </Runtime>
+    </Runtime>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>Release</OutputPath>
+    <Build>
+      <Build Optimize="true" />
+    </Build>
+    <Runtime>
+      <Runtime Module="main" PythonOptions="">
+        <Interpreter path="/usr/bin/python2.6" ctype="Python26Runtime" />
+      </Runtime>
+    </Runtime>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="RfPulseClient.py" />
+    <Compile Include="RfPulseLib.py" />
+    <Compile Include="__init__.py" />
+    <Compile Include="lib.py" />
+  </ItemGroup>
+</Project>

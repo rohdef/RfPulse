@@ -112,7 +112,7 @@ class pa_sample_spec_struct(Structure):
 
 class pa_channel_map_struct(Structure):
     _fields_ = [("channels", c_uint8),
-        ("map", pa_channel_position_t)]
+        ("map", pa_channel_position_t * 64)]
 
 class pa_cvolume_struct(Structure):
     _fields_ = [("channels", c_uint8),
@@ -183,6 +183,13 @@ class pa_server_info_struct(Structure):
         ("cookie", c_uint32),
         ("channel_map", pa_channel_map_struct)]
 
+class pa_module_info_struct(Structure):
+    _fields_ = [("index", c_uint32),
+        ("name", c_char_p),
+        ("argument", c_char_p),
+        ("n_used", c_uint32),
+        ("proplist", pa_proplist_struct)]
+
 #
 # Callback creation functions
 #
@@ -190,9 +197,10 @@ class pa_server_info_struct(Structure):
 contextNotifyCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(None))
 
 # introspect.h
-sinkInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_sink_info_struct), POINTER(None))
-sourceInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_source_info_struct), c_int, POINTER(None))
+sinkInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_sink_info_struct), POINTER(None))
+sourceInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_source_info_struct), c_int, POINTER(None))
 serverInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_server_info_struct), POINTER(None))
+moduleInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_module_info_struct), c_int, POINTER(None))
 
 #
 # Function return types for the different header files

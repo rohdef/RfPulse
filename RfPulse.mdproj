@@ -40,6 +40,7 @@
     <Compile Include="model\Volume.py" />
     <Compile Include="model\Sink.py" />
     <Compile Include="model\Source.py" />
+    <Compile Include="model\Module.py" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README" />

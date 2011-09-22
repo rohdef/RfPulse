@@ -27,6 +27,7 @@ from ctypes import *
 from model.Server import Server
 from model.Sink import Sink
 from model.Source import Source
+from model.Module import Module
 
 class RfPulseClient():
     """Provides an relatively easy way of communicating with PulseAudio"""
@@ -63,13 +64,15 @@ class RfPulseClient():
         self._resetLists()
         
     def _initCallbacks(self):
-        self._sinkInfoListCallbackType = sinkInfoCallbackType(self._sinkInfoListCallback)
-        self._sourceInfoListCallbackType = sourceInfoCallbackType(self._sourceInfoListCallback)
+        self._sinkInfoListCallbackType = sinkInfoListCallbackType(self._sinkInfoListCallback)
+        self._sourceInfoListCallbackType = sourceInfoListCallbackType(self._sourceInfoListCallback)
         self._serverInfoCallbackType = serverInfoCallbackType(self._serverInfoCallback)
+        self._moduleInfoListCallbackType = moduleInfoListCallbackType(self._moduleInfoListCallback)
     
     def _resetLists(self):
         self.sinks = {}
-        self.sources = {}    
+        self.sources = {}
+        self.modules = {}
     
     def disconnect(self):
         self._pa.pa_context_disconnect(self.context)
@@ -112,6 +115,15 @@ class RfPulseClient():
     def _serverInfoCallback(self, context, serverInfo, userData):
         if serverInfo:
             self.server = Server(serverInfo.contents)
+    
+    def getModuleInfoList(self):
+        operation = self._pa.pa_context_get_module_info_list(self.context, self._moduleInfoListCallbackType, None)
+        self._pa.pa_operation_unref(operation)
+    
+    def _moduleInfoListCallback(self, context, moduleInfo, eof, userData):
+        if moduleInfo:
+            module = Module(moduleInfo.contents)
+            self.modules[module.index] = module
     
     def _contextStateCallback(self, context, userData):
         state = self._pa.pa_context_get_state(context)

@@ -35,6 +35,11 @@
     <Compile Include="RfPulseLib.py" />
     <Compile Include="__init__.py" />
     <Compile Include="lib.py" />
+    <Compile Include="model\__init__.py" />
+    <Compile Include="model\Server.py" />
+    <Compile Include="model\Volume.py" />
+    <Compile Include="model\Sink.py" />
+    <Compile Include="model\Source.py" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README" />
@@ -48,4 +53,7 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="model\" />
+  </ItemGroup>
 </Project>

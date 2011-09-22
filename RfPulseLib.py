@@ -170,17 +170,29 @@ class pa_source_info_struct(Structure):
         ("card", c_uint32),
         ("n_ports", c_uint32),
         ("ports", pa_source_port_info_struct * 32),
-        ("active_port", pa_source_port_info_struct)]    
+        ("active_port", pa_source_port_info_struct)]
 
+class pa_server_info_struct(Structure):
+    _fields_ = [("user_name", c_char_p),
+        ("host_name", c_char_p),
+        ("server_version", c_char_p),
+        ("server_name", c_char_p),
+        ("sample_spec", pa_sample_spec_struct),
+        ("default_sink_name", c_char_p),
+        ("default_source_name", c_char_p),
+        ("cookie", c_uint32),
+        ("channel_map", pa_channel_map_struct)]
 
 #
 # Callback creation functions
 #
 
 contextNotifyCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(None))
+
+# introspect.h
 sinkInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_sink_info_struct), POINTER(None))
 sourceInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_source_info_struct), c_int, POINTER(None))
-
+serverInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_server_info_struct), POINTER(None))
 
 #
 # Function return types for the different header files

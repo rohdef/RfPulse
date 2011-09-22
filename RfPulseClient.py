@@ -24,6 +24,9 @@ from RfPulseLib import *
 import ctypes
 from ctypes import *
 
+from model.Server import Server
+from model.Sink import Sink
+from model.Source import Source
 
 class RfPulseClient():
     """Provides an relatively easy way of communicating with PulseAudio"""
@@ -62,10 +65,11 @@ class RfPulseClient():
     def _initCallbacks(self):
         self._sinkInfoListCallbackType = sinkInfoCallbackType(self._sinkInfoListCallback)
         self._sourceInfoListCallbackType = sourceInfoCallbackType(self._sourceInfoListCallback)
+        self._serverInfoCallbackType = serverInfoCallbackType(self._serverInfoCallback)
     
     def _resetLists(self):
-        self.sinks = []
-        self.sources = []    
+        self.sinks = {}
+        self.sources = {}    
     
     def disconnect(self):
         self._pa.pa_context_disconnect(self.context)
@@ -83,7 +87,8 @@ class RfPulseClient():
 
     def _sinkInfoListCallback(self, context, sinkInfo, userData):
         if sinkInfo:
-            self.sinks.append(sinkInfo.contents)
+            sink = Sink(sinkInfo.contents)
+            self.sinks[sink.index] = sink
             for ev in self.events['sinkInfoList']:
                 pass
     
@@ -94,10 +99,19 @@ class RfPulseClient():
     
     def _sourceInfoListCallback(self, context, sourceInfo, eol, userData):
         if sourceInfo:
-            self.sources.append(sourceInfo.contents)
+            source = Source(sourceInfo.contents)
+            self.sources[source.index] = source
             
             for ev in self.events['sourceInfoList']:
                 pass
+    
+    def getServerInfo(self):
+        operation = self._pa.pa_context_get_server_info(self.context, self._serverInfoCallbackType, None)
+        self._pa.pa_operation_unref(operation)
+    
+    def _serverInfoCallback(self, context, serverInfo, userData):
+        if serverInfo:
+            self.server = Server(serverInfo.contents)
     
     def _contextStateCallback(self, context, userData):
         state = self._pa.pa_context_get_state(context)

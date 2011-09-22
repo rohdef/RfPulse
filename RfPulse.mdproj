@@ -36,4 +36,7 @@
     <Compile Include="__init__.py" />
     <Compile Include="lib.py" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README" />
+  </ItemGroup>
 </Project>

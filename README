@@ -34,10 +34,25 @@ print sink.description
 pa.disconnect()
 
 
+
 Bugs, contact, etc
 ------------------
 Currently I would as people from refraining to reporting bugs, since this
 project is in such an early stage.
+
+I would also prefer that I get no feature requests at the moment. Basically they
+would just be ignored, since my priority is to get the basics to work first.
+
+If you have suggestions for improvement of code (read pattern suggestions, better
+ways of solving problems etc.) I would be happy to get your requests.
+
+Also if you feel like you can help out in any other way feel free to contact me :)
+
+Rohde Fischer
+Kirkegaardsvej 10 D, 3.-3
+DK-8000 Aarhus C
+Denmark
+rohdef@rohdef.dk
 
 
 

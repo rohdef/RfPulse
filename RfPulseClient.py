@@ -31,6 +31,20 @@ class RfPulseClient():
     def __init__(self, contextName):
         self.name = contextName
         self._pa = getPa()
+        
+        self.events = {
+            'contextNotify': [],
+            'contextConnected': [],
+            'contextConnectionFailed': [],
+            'contextDisconnected': [],
+            'sinkInfoList': [],
+            'sourceInfoList': [],
+            }
+
+        self.sinks = []
+        self.sources = []
+                
+        self._initCallbacks()
     
     def connect(self):
         self.mainLoop = self._pa.pa_threaded_mainloop_new()
@@ -43,46 +57,61 @@ class RfPulseClient():
         self._pa.pa_context_connect(self.context, None, 0, None)
         self._pa.pa_threaded_mainloop_start(self.mainLoop)
         
+        self._resetLists()
+        
+    def _initCallbacks(self):
+        self._sinkInfoListCallbackType = sinkInfoCallbackType(self._sinkInfoListCallback)
+        self._sourceInfoListCallbackType = sourceInfoCallbackType(self._sourceInfoListCallback)
+    
+    def _resetLists(self):
         self.sinks = []
+        self.sources = []    
     
     def disconnect(self):
         self._pa.pa_context_disconnect(self.context)
         self._pa.pa_context_unref(self.context)
         
         # These seems to cause trouble, problem is, afaik they should be there
-#        self._pa.pa_threaded_mainloop_stop()
-#        self._pa.pa_threaded_mainloop_free()
+        #self._pa.pa_threaded_mainloop_stop()
+        #self._pa.pa_threaded_mainloop_free()
+        self._resetLists()
 
     def getSinkInfoList(self):
-        self._sinkInfoListCallbackType = sinkInfoCallbackType(self._sinkInfoListCallback)
-        operation = self._pa.pa_context_get_sink_info_list(self.context, self._sinkInfoListCallbackType, None)
+        operation = self._pa.pa_context_get_sink_info_list(self.context,
+            self._sinkInfoListCallbackType, None)
         self._pa.pa_operation_unref(operation)
 
     def _sinkInfoListCallback(self, context, sinkInfo, userData):
         if sinkInfo:
             self.sinks.append(sinkInfo.contents)
-        # TODO event
+            for ev in self.events['sinkInfoList']:
+                pass
+    
+    def getSourceInfoList(self):
+        operation = self._pa.pa_context_get_source_info_list(self.context,
+            self._sourceInfoListCallbackType, None)
+        self._pa.pa_operation_unref(operation)
+    
+    def _sourceInfoListCallback(self, context, sourceInfo, eol, userData):
+        if sourceInfo:
+            self.sources.append(sourceInfo.contents)
+            
+            for ev in self.events['sinkInfoList']:
+                pass
     
     def _contextStateCallback(self, context, userData):
-        #print 'Context state: {0}'.format(ContextState.states[self._pa.pa_context_get_state(context)])
-        # TODO event
-        
         state = self._pa.pa_context_get_state(context)
         
-        if state == ContextState.UNCONNECTED:
-            pass
-        elif state == ContextState.CONNECTING:
-            pass
-        elif state == ContextState.AUTHORIZING:
-            pass
-        elif state == ContextState.SETTING_NAME:
-            pass
-        elif state == ContextState.READY:
-            print 'Ready'
+        if  state == ContextState.READY:
+            for ev in self.events['contextConnected']:
+                pass    
         elif state == ContextState.FAILED:
-            pass
+            for ev in self.events['contextConnectionFailed']:
+           	    pass
         elif state == ContextState.TERMINATED:
-            pass
+            for ev in self.events['contextDisconnected']:
+                pass    
     
     def _sinkListCallback(self, context, sink_info, eol, userData):
-        pass
+        for ev in self.events['sinkInfoList']:
+            pass

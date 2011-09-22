@@ -15,7 +15,7 @@
     </Build>
     <Runtime>
       <Runtime Module="main" PythonOptions="">
-        <Interpreter path="/usr/bin/python2.6" ctype="Python26Runtime" />
+        <Interpreter path="/usr/bin/python2.7" ctype="Python27Runtime" />
       </Runtime>
     </Runtime>
   </PropertyGroup>
@@ -39,4 +39,13 @@
   <ItemGroup>
     <None Include="README" />
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy FileWidth="120" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-python" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

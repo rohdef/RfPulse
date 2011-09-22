@@ -88,8 +88,13 @@ pa_usec_t = c_uint64 # TODO inspect further
 pa_sample_format_t = c_int # TODO create enum-like for this
 pa_channel_position_t = c_int # TODO create enum-like for this
 pa_volume_t = c_uint32 # TODO inspect this further
-pa_sink_flags_t = c_int # TODO enum this?
-pa_sink_state_t = c_int # TODO enum this
+
+pa_sink_flags_t = c_int # enum
+pa_sink_state_t = c_int # enum
+
+pa_source_flags = c_int # enum
+pa_source_state = c_int # enum
+
 
 class pa_operation_struct(Structure):
     pass
@@ -116,6 +121,9 @@ class pa_cvolume_struct(Structure):
 class pa_sink_port_info_struct(Structure):
     _fields_ = [("name", c_char_p), ("description", c_char_p), ("priority", c_uint32)]
 
+class pa_source_port_info_struct(Structure):
+    _fields_ = [("name", c_char_p), ("description", c_char_p), ("priority", c_uint32)]    
+
 class pa_sink_info_struct(Structure):
     _fields_ = [('name', c_char_p),
         ("index", c_uint32),
@@ -140,12 +148,38 @@ class pa_sink_info_struct(Structure):
         ("ports", pa_sink_port_info_struct * 32),
         ("active_port", pa_sink_port_info_struct)]
 
+class pa_source_info_struct(Structure):
+    _fields_ = [("name", c_char_p),
+        ("index", c_uint32),
+        ("description", c_char_p),
+        ("sample_spec", pa_sample_spec_struct),
+        ("channel_map", pa_channel_map_struct),
+        ("owner_module", c_uint32),
+        ("volume", pa_cvolume_struct),
+        ("mute", c_int),
+        ("monitor_of_sink", c_uint32),
+        ("monitor_of_sink_name", c_char_p),
+        ("latency", pa_usec_t),
+        ("driver", c_char_p),
+        ("flags", pa_source_flags),
+        ("proplist", pa_proplist_struct),
+        ("configured_latency", pa_usec_t),
+        ("base_volume", pa_volume_t),
+        ("state", pa_source_state),
+        ("n_volume_steps", c_uint32),
+        ("card", c_uint32),
+        ("n_ports", c_uint32),
+        ("ports", pa_source_port_info_struct * 32),
+        ("active_port", pa_source_port_info_struct)]    
+
+
 #
 # Callback creation functions
 #
 
 contextNotifyCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(None))
 sinkInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_sink_info_struct), POINTER(None))
+sourceInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_source_info_struct), c_int, POINTER(None))
 
 
 #
@@ -154,7 +188,11 @@ sinkInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_si
 # This can be ignored by most developers
 #
 
+# context.h
+
 _pa.pa_context_new.restype = POINTER(pa_context_struct)
+
+
 
 # introspect.h
 
@@ -172,8 +210,20 @@ _pa.pa_context_suspend_source_by_name.restype = POINTER(pa_operation_struct)
 _pa.pa_context_unload_module.restype = POINTER(pa_operation_struct)
 
 # Sources
+_pa.pa_context_get_source_info_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_source_info_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_source_info_list.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_source_volume_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_source_volume_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_source_mute_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_source_mute_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_suspend_source_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_suspend_source_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_source_port_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_source_port_by_name.restype = POINTER(pa_operation_struct)
 
 # Server
+_pa.pa_context_get_server_info.restype = POINTER(pa_operation_struct)
 
 # Modules
 

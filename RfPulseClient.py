@@ -96,7 +96,7 @@ class RfPulseClient():
         if sourceInfo:
             self.sources.append(sourceInfo.contents)
             
-            for ev in self.events['sinkInfoList']:
+            for ev in self.events['sourceInfoList']:
                 pass
     
     def _contextStateCallback(self, context, userData):

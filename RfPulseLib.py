@@ -226,18 +226,46 @@ _pa.pa_context_set_source_port_by_name.restype = POINTER(pa_operation_struct)
 _pa.pa_context_get_server_info.restype = POINTER(pa_operation_struct)
 
 # Modules
+_pa.pa_context_get_module_info.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_module_info_list.restype = POINTER(pa_operation_struct)
+_pa.pa_context_load_module.restype = POINTER(pa_operation_struct)
+_pa.pa_context_unload_module.restype = POINTER(pa_operation_struct)
 
 # Clients
+_pa.pa_context_get_client_info.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_client_info_list.restype = POINTER(pa_operation_struct)
+_pa.pa_context_kill_client.restype = POINTER(pa_operation_struct)
 
 # Cards
+_pa.pa_context_get_card_info_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_card_info_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_card_info_list.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_card_profile_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_card_profile_by_name.restype = POINTER(pa_operation_struct)
 
 # Sink inputs
+_pa.pa_context_get_sink_input_info.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_sink_input_info_list.restype = POINTER(pa_operation_struct)
+_pa.pa_context_move_sink_input_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_move_sink_input_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_sink_input_volume.restype = POINTER(pa_operation_struct)
+_pa.pa_context_set_sink_input_mute.restype = POINTER(pa_operation_struct)
+_pa.pa_context_kill_sink_input.restype = POINTER(pa_operation_struct)
 
 # Source outputs
+_pa.pa_context_get_source_output_info.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_source_output_info_list.restype = POINTER(pa_operation_struct)
+_pa.pa_context_move_source_output_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_move_source_output_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_kill_source_output.restype = POINTER(pa_operation_struct)
 
 # Statistics
+_pa.pa_context_stat.restype = POINTER(pa_operation_struct)
 
 # Cached samples
+_pa.pa_context_get_sample_info_by_name.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_sample_info_by_index.restype = POINTER(pa_operation_struct)
+_pa.pa_context_get_sample_info_list.restype = POINTER(pa_operation_struct)
 
 
 

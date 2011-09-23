@@ -41,6 +41,7 @@
     <Compile Include="model\Sink.py" />
     <Compile Include="model\Source.py" />
     <Compile Include="model\Module.py" />
+    <Compile Include="model\Client.py" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README" />

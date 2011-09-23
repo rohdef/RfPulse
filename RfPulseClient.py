@@ -28,6 +28,7 @@ from model.Server import Server
 from model.Sink import Sink
 from model.Source import Source
 from model.Module import Module
+from model.Client import Client
 
 class RfPulseClient():
     """Provides an relatively easy way of communicating with PulseAudio"""
@@ -131,7 +132,8 @@ class RfPulseClient():
     
     def _clientInfoListCallback(self, context, clientInfo, eol, userData):
         if clientInfo:
-            print clientInfo.contents.name
+            client = Client(clientInfo.contents)
+            self.clients[client.index] = client
     
     def _contextStateCallback(self, context, userData):
         state = self._pa.pa_context_get_state(context)

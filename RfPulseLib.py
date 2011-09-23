@@ -190,6 +190,13 @@ class pa_module_info_struct(Structure):
         ("n_used", c_uint32),
         ("proplist", pa_proplist_struct)]
 
+class pa_client_info_struct(Structure):
+    _fields_ = [("index", c_uint32),
+        ("name", c_char_p),
+        ("owner_module", c_uint32),
+        ("driver", c_char_p),
+        ("proplist", pa_proplist_struct)]
+
 #
 # Callback creation functions
 #
@@ -201,6 +208,7 @@ sinkInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(p
 sourceInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_source_info_struct), c_int, POINTER(None))
 serverInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_server_info_struct), POINTER(None))
 moduleInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_module_info_struct), c_int, POINTER(None))
+clientInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_client_info_struct), c_int, POINTER(None))
 
 #
 # Function return types for the different header files

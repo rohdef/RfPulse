@@ -45,8 +45,7 @@ class RfPulseClient():
             'sourceInfoList': [],
             }
 
-        self.sinks = []
-        self.sources = []
+        self._resetLists()
                 
         self._initCallbacks()
     
@@ -68,11 +67,13 @@ class RfPulseClient():
         self._sourceInfoListCallbackType = sourceInfoListCallbackType(self._sourceInfoListCallback)
         self._serverInfoCallbackType = serverInfoCallbackType(self._serverInfoCallback)
         self._moduleInfoListCallbackType = moduleInfoListCallbackType(self._moduleInfoListCallback)
+        self._clientInfoListCallbackType = clientInfoListCallbackType(self._clientInfoListCallback)
     
     def _resetLists(self):
         self.sinks = {}
         self.sources = {}
         self.modules = {}
+        self.clients = {}
     
     def disconnect(self):
         self._pa.pa_context_disconnect(self.context)
@@ -120,10 +121,17 @@ class RfPulseClient():
         operation = self._pa.pa_context_get_module_info_list(self.context, self._moduleInfoListCallbackType, None)
         self._pa.pa_operation_unref(operation)
     
-    def _moduleInfoListCallback(self, context, moduleInfo, eof, userData):
+    def _moduleInfoListCallback(self, context, moduleInfo, eol, userData):
         if moduleInfo:
             module = Module(moduleInfo.contents)
             self.modules[module.index] = module
+    
+    def getClientInfoList(self):
+        operation = self._pa.pa_context_get_client_info_list(self.context, self._clientInfoListCallbackType, None)
+    
+    def _clientInfoListCallback(self, context, clientInfo, eol, userData):
+        if clientInfo:
+            print clientInfo.contents.name
     
     def _contextStateCallback(self, context, userData):
         state = self._pa.pa_context_get_state(context)

@@ -31,17 +31,21 @@
     </Runtime>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="RfPulseClient.py" />
-    <Compile Include="RfPulseLib.py" />
-    <Compile Include="__init__.py" />
-    <Compile Include="lib.py" />
-    <Compile Include="model\__init__.py" />
-    <Compile Include="model\Server.py" />
-    <Compile Include="model\Volume.py" />
-    <Compile Include="model\Sink.py" />
-    <Compile Include="model\Source.py" />
-    <Compile Include="model\Module.py" />
-    <Compile Include="model\Client.py" />
+    <Compile Include="test\__init__.py" />
+    <Compile Include="test\Test.py" />
+    <Compile Include="src\model\__init__.py" />
+    <Compile Include="src\model\Server.py" />
+    <Compile Include="src\model\Volume.py" />
+    <Compile Include="src\model\Sink.py" />
+    <Compile Include="src\model\Source.py" />
+    <Compile Include="src\model\Module.py" />
+    <Compile Include="src\model\Client.py" />
+    <Compile Include="src\model\Card.py" />
+    <Compile Include="src\model\SinkInput.py" />
+    <Compile Include="src\__init__.py" />
+    <Compile Include="src\lib.py" />
+    <Compile Include="src\RfPulseClient.py" />
+    <Compile Include="src\RfPulseLib.py" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README" />
@@ -56,6 +60,6 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Folder Include="model\" />
+    <Folder Include="src\" />
   </ItemGroup>
 </Project>

@@ -29,6 +29,8 @@ from model.Sink import Sink
 from model.Source import Source
 from model.Module import Module
 from model.Client import Client
+from model.Card import Card
+from model.SinkInput import SinkInput
 
 class RfPulseClient():
     """Provides an relatively easy way of communicating with PulseAudio"""
@@ -44,6 +46,11 @@ class RfPulseClient():
             'contextDisconnected': [],
             'sinkInfoList': [],
             'sourceInfoList': [],
+            'serverInfo': [],
+            'moduleInfoList': [],
+            'clientInfoList': [],
+            'cardInfoList': [],
+            'sinkInputInfoList': [],
             }
 
         self._resetLists()
@@ -69,12 +76,17 @@ class RfPulseClient():
         self._serverInfoCallbackType = serverInfoCallbackType(self._serverInfoCallback)
         self._moduleInfoListCallbackType = moduleInfoListCallbackType(self._moduleInfoListCallback)
         self._clientInfoListCallbackType = clientInfoListCallbackType(self._clientInfoListCallback)
+        self._cardInfoListCallbackType = cardInfoListCallbackType(self._cardInfoListCallback)
+        self._sinkInputInfoListCallbackType = sinkInputInfoListCallbackType(self._sinkInputInfoListCallback)
     
     def _resetLists(self):
-        self.sinks = {}
-        self.sources = {}
-        self.modules = {}
-        self.clients = {}
+        self.sinks = []
+        self.sources = []
+        self.server = None
+        self.modules = []
+        self.clients = []
+        self.cards = []
+        self.sinkInputs = []
     
     def disconnect(self):
         self._pa.pa_context_disconnect(self.context)
@@ -93,7 +105,8 @@ class RfPulseClient():
     def _sinkInfoListCallback(self, context, sinkInfo, userData):
         if sinkInfo:
             sink = Sink(sinkInfo.contents)
-            self.sinks[sink.index] = sink
+            self.sinks.insert(sink.index, sink)
+            
             for ev in self.events['sinkInfoList']:
                 pass
     
@@ -105,7 +118,7 @@ class RfPulseClient():
     def _sourceInfoListCallback(self, context, sourceInfo, eol, userData):
         if sourceInfo:
             source = Source(sourceInfo.contents)
-            self.sources[source.index] = source
+            self.sources.insert(source.index, source)
             
             for ev in self.events['sourceInfoList']:
                 pass
@@ -117,6 +130,9 @@ class RfPulseClient():
     def _serverInfoCallback(self, context, serverInfo, userData):
         if serverInfo:
             self.server = Server(serverInfo.contents)
+            
+            for ev in self.events['serverInfo']:
+                pass
     
     def getModuleInfoList(self):
         operation = self._pa.pa_context_get_module_info_list(self.context, self._moduleInfoListCallbackType, None)
@@ -125,15 +141,48 @@ class RfPulseClient():
     def _moduleInfoListCallback(self, context, moduleInfo, eol, userData):
         if moduleInfo:
             module = Module(moduleInfo.contents)
-            self.modules[module.index] = module
+            self.modules.insert(module.index, module)
+            
+            for ev in self.events['moduleInfoList']:
+                pass
     
     def getClientInfoList(self):
         operation = self._pa.pa_context_get_client_info_list(self.context, self._clientInfoListCallbackType, None)
+        self._pa.pa_operation_unref(operation)
     
     def _clientInfoListCallback(self, context, clientInfo, eol, userData):
         if clientInfo:
             client = Client(clientInfo.contents)
-            self.clients[client.index] = client
+            self.clients.insert(client.index, client)
+            
+            for ev in self.events['clientInfoList']:
+                pass
+    
+    def getCardInfoList(self):
+        operation = self._pa.pa_context_get_card_info_list(self.context, self._cardInfoListCallbackType, None)
+        self._pa.pa_operation_unref(operation)
+    
+    def _cardInfoListCallback(self, context, cardInfo, eol, userData):
+        if cardInfo:
+            card = Card(cardInfo.contents)
+            self.cards.insert(card.index, card)
+            
+            for ev in self.events['cardInfoList']:
+                pass
+    
+    def getSinkInputInfoList(self):
+        operation = self._pa.pa_context_get_sink_input_info_list(self.context, self._sinkInputInfoListCallbackType, None)
+        self._pa.pa_operation_unref(operation)
+    
+    def _sinkInputInfoListCallback(self, context, sinkInputInfo, eol, userData):
+        if sinkInputInfo:
+            sinkInput = SinkInput(sinkInputInfo.contents)
+            self.sinkInputs.insert(sinkInput.index, sinkInput)
+            
+            for ev in self.events['sinkInputInfoList']:
+                pass
+    
+    
     
     def _contextStateCallback(self, context, userData):
         state = self._pa.pa_context_get_state(context)

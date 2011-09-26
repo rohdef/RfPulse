@@ -197,6 +197,39 @@ class pa_client_info_struct(Structure):
         ("driver", c_char_p),
         ("proplist", pa_proplist_struct)]
 
+class pa_card_profile_info_struct(Structure):
+    _fields_ = [("name", c_char_p),
+        ("description", c_char_p),
+        ("n_sinks", c_uint32),
+        ("n_sources", c_uint32),
+        ("priority", c_uint32)]
+
+class pa_card_info_struct(Structure):
+    _fields_ = [("index", c_uint32),
+        ("name", c_char_p),
+        ("owner_module", c_uint32),
+        ("driver", c_char_p),
+        ("n_profiles", c_uint32),
+        ("profiles", pa_card_profile_info_struct),
+        ("active_profile", pa_card_profile_info_struct),
+        ("proplist", pa_proplist_struct)]
+
+class pa_sink_input_info_struct(Structure):
+    _fields_ = [("index", c_uint32),
+        ("name", c_char_p),
+        ("owner_module", c_uint32),
+        ("client", c_uint32),
+        ("sink", c_uint32),
+        ("sample_spec", pa_sample_spec_struct),
+        ("channel_map", pa_channel_map_struct),
+        ("volume", pa_cvolume_struct),
+        ("buffer_usec", pa_usec_t),
+        ("sink_usec", pa_usec_t),
+        ("resample_method", c_char_p),
+        ("driver", c_char_p),
+        ("mute", c_int),
+        ("proplist", pa_proplist_struct)]
+
 #
 # Callback creation functions
 #
@@ -209,6 +242,8 @@ sourceInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER
 serverInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_server_info_struct), POINTER(None))
 moduleInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_module_info_struct), c_int, POINTER(None))
 clientInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_client_info_struct), c_int, POINTER(None))
+cardInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_card_info_struct), c_int, POINTER(None))
+sinkInputInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_sink_input_info_struct), c_int, POINTER(None))
 
 #
 # Function return types for the different header files

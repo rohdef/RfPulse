@@ -22,27 +22,19 @@
 
 from Volume import Volume
 
-class Source():
-    def __init__(self, source):
-        self.name = output.name
-        self.index = output.index
-        self.description = output.description
-        self.sample_spec = output.sample_spec # class
-        self.channel_map = output.channel_map # class
-        self.owner_module = output.owner_module
-        self.volume = Volume(output.volume) # does this work?
-        self.mute = output.mute
-        self.monitor_of_sink = output.monitor_of_sink
-        self.monitor_of_sink_name = output.monitor_of_sink_name
-        self.latency = output.latency # class
-        self.driver = output.driver
-        self.flags = output.flags # class
-        self.proplist = output.proplist # class
-        self.configured_latency = output.configured_latency # class
-        self.base_volume = output.base_volume # class
-        self.state = output.state # class
-        self.n_volume_steps = output.n_volume_steps
-        self.card = output.card
-        self.n_ports = output.n_ports
-        self.ports = output.ports # class
-        self.active_port = output.active_port # class
+class SinkInput():
+    def __init__(self, sinkInput):
+        self.index = sinkInput.index
+        self.name = sinkInput.name
+        self.ownerModule = int(sinkInput.owner_module)
+        self.client = sinkInput.client
+        self.sink = sinkInput.sink
+        self.sampleSpec = sinkInput.sample_spec # class this
+        self.channelMap = sinkInput.channel_map # class this
+        self.volume = Volume(sinkInput.volume) # does this work?
+        self.bufferUsec = sinkInput.buffer_usec # enum
+        self.sinkUsec = sinkInput.sink_usec # enum
+        self.resampleMethod = sinkInput.resample_method
+        #self.driver = sinkInput.driver # TODO causes segfault, will be fixed later
+        self.mute = sinkInput.mute
+        self.proplist = sinkInput.proplist # class this

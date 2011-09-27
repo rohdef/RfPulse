@@ -119,10 +119,12 @@ class pa_cvolume_struct(Structure):
         ("values", pa_volume_t * 64) ]
 
 class pa_sink_port_info_struct(Structure):
-    _fields_ = [("name", c_char_p), ("description", c_char_p), ("priority", c_uint32)]
+    _fields_ = [("name", c_char_p),
+        ("description", c_char_p), ("priority", c_uint32)]
 
 class pa_source_port_info_struct(Structure):
-    _fields_ = [("name", c_char_p), ("description", c_char_p), ("priority", c_uint32)]    
+    _fields_ = [("name", c_char_p),
+        ("description", c_char_p), ("priority", c_uint32)]
 
 class pa_sink_info_struct(Structure):
     _fields_ = [('name', c_char_p),

@@ -20,11 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
-class Volume():
-    def __init__(self, volume):
-        self.channels = int(volume.channels)
-        self.values = []
-        
-        for i in range(0, self.channels):
-            self.values.append(int(volume.values[i]))
+class SampleSpecification():
+    def __init__(self, sample):
+        self.format = sample.format # Enum
+        self.rate = int(sample.rate)
+        self.channels = int(sample.channels)

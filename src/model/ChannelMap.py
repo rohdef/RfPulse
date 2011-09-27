@@ -20,11 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
-class Volume():
-    def __init__(self, volume):
-        self.channels = int(volume.channels)
-        self.values = []
+class ChannelMap():
+    def __init__(self, channelMap):
+        self.channels = int(channelMap.channels)
+        self.map = []
         
         for i in range(0, self.channels):
-            self.values.append(int(volume.values[i]))
+            self.map.insert(i, channelMap.map[i])

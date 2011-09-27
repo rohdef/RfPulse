@@ -46,9 +46,12 @@
     <Compile Include="src\lib.py" />
     <Compile Include="src\RfPulseClient.py" />
     <Compile Include="src\RfPulseLib.py" />
+    <Compile Include="src\model\ChannelMap.py" />
+    <Compile Include="src\model\Port.py" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README" />
+    <None Include="src\model\SampleSpecification.py" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

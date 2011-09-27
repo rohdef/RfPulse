@@ -81,6 +81,8 @@ class RfPulseClient():
     
     def _resetLists(self):
         self.sinks = []
+        self.sinkIndexes = []
+        
         self.sources = []
         self.server = None
         self.modules = []
@@ -106,6 +108,7 @@ class RfPulseClient():
         if sinkInfo:
             sink = Sink(sinkInfo.contents)
             self.sinks.insert(sink.index, sink)
+            self.sinkIndexes.append(sink.index)
             
             for ev in self.events['sinkInfoList']:
                 pass

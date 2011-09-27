@@ -21,17 +21,20 @@
 # THE SOFTWARE.
 
 from Volume import Volume
+from SampleSpecification import SampleSpecification
+from ChannelMap import ChannelMap
+import Port
 
 class Source():
     def __init__(self, source):
         self.name = source.name
-        self.index = source.index
+        self.index = int(source.index)
         self.description = source.description
-        self.sampleSpec = source.sample_spec # class
-        self.channelMap = source.channel_map # class
+        self.sampleSpecification = SampleSpecification(source.sample_spec)
+        self.channelMap = ChannelMap(source.channel_map)
         self.ownerModule = source.owner_module
         self.volume = Volume(source.volume) # does this work?
-        self.mute = source.mute
+        self.mute = int(source.mute)
         self.monitorOfSink = source.monitor_of_sink
         self.monitorOfSink_name = source.monitor_of_sink_name
         self.latency = source.latency # class
@@ -39,10 +42,10 @@ class Source():
         self.flags = source.flags # class
         self.proplist = source.proplist # class
         self.configured_latency = source.configured_latency # class
-        self.baseVolume = source.base_volume # class
+        self.baseVolume = int(source.base_volume) # class
         self.state = source.state # class
-        self.nVolume_steps = source.n_volume_steps
-        self.card = source.card
-        self.nPorts = source.n_ports
+        self.nVolumeSteps = int(source.n_volume_steps)
+        self.card = int(source.card)
+        self.nPorts = int(source.n_ports)
         self.ports = source.ports # class
-        self.active_port = source.active_port # class
+        self.activePort = Port.SourcePort(source.active_port) # class

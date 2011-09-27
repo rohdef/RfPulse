@@ -21,17 +21,20 @@
 # THE SOFTWARE.
 
 from Volume import Volume
+from SampleSpecification import SampleSpecification
+from ChannelMap import ChannelMap
+import Port
 
 class Sink():
     def __init__(self, sink):
         self.name = sink.name
-        self.index = sink.index
+        self.index = int(sink.index)
         self.description = sink.description
-        self.sampleSpec = sink.sample_spec # class this
-        self.channelMap = sink.channel_map # class this
+        self.sampleSpecification = SampleSpecification(sink.sample_spec)
+        self.channelMap = ChannelMap(sink.channel_map)
         self.ownerModule = int(sink.owner_module)
         self.volume = Volume(sink.volume) # does this work?
-        self.mute = sink.mute
+        self.mute = int(sink.mute)
         self.monitorSource = sink.monitor_source
         self.monitorSource_name = sink.monitor_source_name
         self.latency = sink.latency # class this
@@ -39,10 +42,15 @@ class Sink():
         self.flags = sink.flags # class this
         self.proplist = sink.proplist # class this
         self.configured_latency = sink.configured_latency # class this
-        self.baseVolume = sink.base_volume # class this
+        self.baseVolume = int(sink.base_volume) # enum
         self.state = sink.state # class this
-        self.nVolumeSteps = sink.n_volume_steps
-        self.card = sink.card
-        self.nPorts = sink.n_ports
+        self.nVolumeSteps = int(sink.n_volume_steps)
+        self.card = int(sink.card)
+        self.nPorts = int(sink.n_ports)
+        
         self.ports = sink.ports # class this
-        self.activePorts = sink.active_port # class this 
+        #self.ports = []
+        #for i in range(0, self.nPorts):
+        #    self.ports.insert(i, self.ports[i])
+        
+        self.activePort = Port.SinkPort(sink.active_port) # class this 

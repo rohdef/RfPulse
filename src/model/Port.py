@@ -21,10 +21,17 @@
 # THE SOFTWARE.
 
 
-class Volume():
-    def __init__(self, volume):
-        self.channels = int(volume.channels)
-        self.values = []
-        
-        for i in range(0, self.channels):
-            self.values.append(int(volume.values[i]))
+class _Port():
+    def __init__(self, port):
+        self.name = port.name
+        self.description = port.description
+        self.priority = int(port.priority)
+
+
+class SinkPort(_Port):
+    def __init__(self, port):
+        _Port.__init__(self, port)
+
+class SourcePort(_Port):
+    def __init__(self, port):
+        _Port.__init__(self, port)

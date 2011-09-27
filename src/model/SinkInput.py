@@ -21,6 +21,8 @@
 # THE SOFTWARE.
 
 from Volume import Volume
+from SampleSpecification import SampleSpecification
+from ChannelMap import ChannelMap
 
 class SinkInput():
     def __init__(self, sinkInput):
@@ -29,12 +31,12 @@ class SinkInput():
         self.ownerModule = int(sinkInput.owner_module)
         self.client = sinkInput.client
         self.sink = sinkInput.sink
-        self.sampleSpec = sinkInput.sample_spec # class this
-        self.channelMap = sinkInput.channel_map # class this
+        self.sampleSpecification = SampleSpecification(sinkInput.sample_spec)
+        self.channelMap = ChannelMap(sinkInput.channel_map)
         self.volume = Volume(sinkInput.volume) # does this work?
+        self.mute = int(sinkInput.mute)
         self.bufferUsec = sinkInput.buffer_usec # enum
         self.sinkUsec = sinkInput.sink_usec # enum
         self.resampleMethod = sinkInput.resample_method
         #self.driver = sinkInput.driver # TODO causes segfault, will be fixed later
-        self.mute = sinkInput.mute
         self.proplist = sinkInput.proplist # class this

@@ -19,13 +19,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
+import ctypes
 
 class _Port():
     def __init__(self, port):
-        self.name = port.name
-        self.description = port.description
-        self.priority = int(port.priority)
+        self.name = port.name.contents
+        #self.description = port.description
+        #self.priority = int(port.priority)
 
 
 class SinkPort(_Port):

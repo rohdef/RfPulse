@@ -33,7 +33,7 @@ class SinkInput():
         self.sink = sinkInput.sink
         self.sampleSpecification = SampleSpecification(sinkInput.sample_spec)
         self.channelMap = ChannelMap(sinkInput.channel_map)
-        self.volume = Volume(sinkInput.volume) # does this work?
+        #self.volume = Volume(sinkInput.volume) # does this work? It segfaults in some cases :/
         self.mute = int(sinkInput.mute)
         self.bufferUsec = sinkInput.buffer_usec # enum
         self.sinkUsec = sinkInput.sink_usec # enum

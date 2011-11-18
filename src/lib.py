@@ -103,7 +103,9 @@ class LibraryLoader(object):
         platform_names.extend(names)
         for name in platform_names:
             try:
-                lib = ctypes.cdll.LoadLibrary(name)
+                #lib = ctypes.cdll.LoadLibrary(name)
+                lib = ctypes.CDLL(name, use_errno=True)
+               
                 if _debug_lib:
                     print name
                 if _debug_trace:

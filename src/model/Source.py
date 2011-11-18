@@ -48,4 +48,4 @@ class Source():
         self.card = int(source.card)
         self.nPorts = int(source.n_ports)
         self.ports = source.ports # class
-        self.activePort = Port.SourcePort(source.active_port) # class
+        #self.activePort = Port.SourcePort(source.active_port) # class

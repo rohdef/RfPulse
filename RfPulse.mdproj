@@ -50,8 +50,8 @@
     <Compile Include="src\model\Port.py" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="README" />
     <None Include="src\model\SampleSpecification.py" />
+    <None Include="README.markdown" />
   </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>

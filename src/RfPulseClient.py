@@ -31,6 +31,7 @@ from model.Module import Module
 from model.Client import Client
 from model.Card import Card
 from model.SinkInput import SinkInput
+import time
 
 class RfPulseClient():
     """Provides an relatively easy way of communicating with PulseAudio"""
@@ -54,10 +55,11 @@ class RfPulseClient():
             }
 
         self._resetLists()
-                
+        
         self._initCallbacks()
     
     def connect(self):
+        '''Connects to the pulseaudio server, identifying this client with the name from the constructor.'''
         self.mainLoop = self._pa.pa_threaded_mainloop_new()
         self.mainLoopApi = self._pa.pa_threaded_mainloop_get_api(self.mainLoop)
         self.context = self._pa.pa_context_new(self.mainLoopApi, self.name)
@@ -95,8 +97,8 @@ class RfPulseClient():
         self._pa.pa_context_unref(self.context)
         
         # These seems to cause trouble, problem is, afaik they should be there
-        #self._pa.pa_threaded_mainloop_stop()
-        #self._pa.pa_threaded_mainloop_free()
+        self._pa.pa_threaded_mainloop_stop(self.mainLoop)
+        self._pa.pa_threaded_mainloop_free(self.mainLoop)
         self._resetLists()
 
     def getSinkInfoList(self):
@@ -104,14 +106,14 @@ class RfPulseClient():
             self._sinkInfoListCallbackType, None)
         self._pa.pa_operation_unref(operation)
 
-    def _sinkInfoListCallback(self, context, sinkInfo, userData):
+    def _sinkInfoListCallback(self, context, sinkInfo, eol, userData):
         if sinkInfo:
             sink = Sink(sinkInfo.contents)
             self.sinks.insert(sink.index, sink)
             self.sinkIndexes.append(sink.index)
             
             for ev in self.events['sinkInfoList']:
-                pass
+                ev(userData)
     
     def getSourceInfoList(self):
         operation = self._pa.pa_context_get_source_info_list(self.context,
@@ -124,7 +126,7 @@ class RfPulseClient():
             self.sources.insert(source.index, source)
             
             for ev in self.events['sourceInfoList']:
-                pass
+                ev(userData)
     
     def getServerInfo(self):
         operation = self._pa.pa_context_get_server_info(self.context, self._serverInfoCallbackType, None)
@@ -135,7 +137,7 @@ class RfPulseClient():
             self.server = Server(serverInfo.contents)
             
             for ev in self.events['serverInfo']:
-                pass
+                ev(userData)
     
     def getModuleInfoList(self):
         operation = self._pa.pa_context_get_module_info_list(self.context, self._moduleInfoListCallbackType, None)
@@ -147,7 +149,7 @@ class RfPulseClient():
             self.modules.insert(module.index, module)
             
             for ev in self.events['moduleInfoList']:
-                pass
+                ev(userData)
     
     def getClientInfoList(self):
         operation = self._pa.pa_context_get_client_info_list(self.context, self._clientInfoListCallbackType, None)
@@ -159,7 +161,7 @@ class RfPulseClient():
             self.clients.insert(client.index, client)
             
             for ev in self.events['clientInfoList']:
-                pass
+                ev(userData)
     
     def getCardInfoList(self):
         operation = self._pa.pa_context_get_card_info_list(self.context, self._cardInfoListCallbackType, None)
@@ -171,7 +173,7 @@ class RfPulseClient():
             self.cards.insert(card.index, card)
             
             for ev in self.events['cardInfoList']:
-                pass
+                ev(userData)
     
     def getSinkInputInfoList(self):
         operation = self._pa.pa_context_get_sink_input_info_list(self.context, self._sinkInputInfoListCallbackType, None)
@@ -183,7 +185,7 @@ class RfPulseClient():
             self.sinkInputs.insert(sinkInput.index, sinkInput)
             
             for ev in self.events['sinkInputInfoList']:
-                pass
+                ev(userData)
     
     
     
@@ -192,7 +194,7 @@ class RfPulseClient():
         
         if  state == ContextState.READY:
             for ev in self.events['contextConnected']:
-                pass    
+                ev(userData)
         elif state == ContextState.FAILED:
             for ev in self.events['contextConnectionFailed']:
            	    pass
@@ -202,4 +204,5 @@ class RfPulseClient():
     
     def _sinkListCallback(self, context, sink_info, eol, userData):
         for ev in self.events['sinkInfoList']:
+            #ev(userData)
             pass

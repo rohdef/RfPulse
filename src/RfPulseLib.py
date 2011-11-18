@@ -96,6 +96,16 @@ pa_source_flags = c_int # enum
 pa_source_state = c_int # enum
 
 
+class pa_mainloop_struct(Structure):
+    pass
+
+class pa_threaded_mainloop_struct(Structure):
+    pass
+
+class pa_mainloop_api_struct(Structure):
+    pass
+    # TODO this really needs som work
+
 class pa_operation_struct(Structure):
     pass
 
@@ -115,8 +125,10 @@ class pa_channel_map_struct(Structure):
         ("map", pa_channel_position_t * 64)]
 
 class pa_cvolume_struct(Structure):
-    _fields_ = [("channels", c_uint8),
-        ("values", pa_volume_t * 64) ]
+    pass
+
+pa_cvolume_struct._fields_ = [("channels", c_uint8),
+        ("values", POINTER(pa_volume_t)) ]
 
 class pa_sink_port_info_struct(Structure):
     _fields_ = [("name", c_char_p),
@@ -127,7 +139,9 @@ class pa_source_port_info_struct(Structure):
         ("description", c_char_p), ("priority", c_uint32)]
 
 class pa_sink_info_struct(Structure):
-    _fields_ = [('name', c_char_p),
+    pass
+
+pa_sink_info_struct._fields_ = [('name', c_char_p),
         ("index", c_uint32),
         ("description", c_char_p),
         ("sample_spec", pa_sample_spec_struct),
@@ -147,8 +161,10 @@ class pa_sink_info_struct(Structure):
         ("n_volume_steps", c_uint32),
         ("card", c_uint32),
         ("n_ports", c_uint32),
-        ("ports", pa_sink_port_info_struct * 32),
-        ("active_port", pa_sink_port_info_struct)]
+        ("ports", POINTER(pa_sink_port_info_struct)),
+        ("active_port", POINTER(pa_sink_port_info_struct)),
+        ("n_formats", c_uint8),
+        ("formats", c_int)] # TODO wrong type!
 
 class pa_source_info_struct(Structure):
     _fields_ = [("name", c_char_p),
@@ -217,7 +233,9 @@ class pa_card_info_struct(Structure):
         ("proplist", pa_proplist_struct)]
 
 class pa_sink_input_info_struct(Structure):
-    _fields_ = [("index", c_uint32),
+    pass
+    
+pa_sink_input_info_struct._fields_ = [("index", c_uint32),
         ("name", c_char_p),
         ("owner_module", c_uint32),
         ("client", c_uint32),
@@ -239,7 +257,7 @@ class pa_sink_input_info_struct(Structure):
 contextNotifyCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(None))
 
 # introspect.h
-sinkInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_sink_info_struct), POINTER(None))
+sinkInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_sink_info_struct), c_int, POINTER(None))
 sourceInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_source_info_struct), c_int, POINTER(None))
 serverInfoCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_server_info_struct), POINTER(None))
 moduleInfoListCallbackType = CFUNCTYPE(None, POINTER(pa_context_struct), POINTER(pa_module_info_struct), c_int, POINTER(None))
@@ -333,9 +351,28 @@ _pa.pa_context_get_sample_info_by_index.restype = POINTER(pa_operation_struct)
 _pa.pa_context_get_sample_info_list.restype = POINTER(pa_operation_struct)
 
 
+# mainloop.h
+_pa.pa_mainloop_new.restype = POINTER(pa_mainloop_struct)
+_pa.pa_mainloop_free.restype = None
+_pa.pa_mainloop_get_api.restype = POINTER(pa_mainloop_api_struct)
+
+
+# thread-mainloop.h
+_pa.pa_threaded_mainloop_new.restype = POINTER(pa_threaded_mainloop_struct)
+_pa.pa_threaded_mainloop_free.restype = None
+_pa.pa_threaded_mainloop_stop.restype = None
+_pa.pa_threaded_mainloop_lock.restype = None
+_pa.pa_threaded_mainloop_unlock.restype = None
+_pa.pa_threaded_mainloop_wait.restype = None
+_pa.pa_threaded_mainloop_signal.restype = None
+_pa.pa_threaded_mainloop_accept.restype = None
+_pa.pa_threaded_mainloop_get_api.restype = POINTER(pa_mainloop_api_struct)
+
 
 # volume.h
 _pa.pa_cvolume_init.restype = POINTER(pa_cvolume_struct)
+_pa.pa_cvolume_init.argtypes = [POINTER(pa_cvolume_struct)]
+
 _pa.pa_cvolume_set.restype = POINTER(pa_cvolume_struct)
 _pa.pa_cvolume_snprint.restype = c_char_p
 _pa.pa_sw_cvolume_snprint_dB.restype = c_char_p

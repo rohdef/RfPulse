@@ -23,8 +23,9 @@
 
 class Volume():
     def __init__(self, volume):
-        self.channels = int(volume.channels)
+        self.channels = volume.channels
         self.values = []
         
-        for i in range(0, self.channels):
+        # Look at -1, if fixes null problem, but ain't something wrong there?
+        for i in range(0, self.channels-1):
             self.values.append(int(volume.values[i]))
